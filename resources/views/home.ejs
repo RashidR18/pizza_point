@@ -21,10 +21,11 @@
           <h2 class="mb-2 text-lg font-semibold"><%= pizza.name %></h2>
           <div class="flex items-center justify-between mt-4">
             <span class="font-bold text-lg">₹<%= pizza.price %></span>
-            <button data-pizza="<%= JSON.stringify(pizza) %>" class="add-to-cart py-1 px-4 rounded-full flex items-center font-bold btn-primary">
-              <span>+</span>
-              <span class="ml-2">Add</span>
-            </button>
+           <button data-pizza="<%= JSON.stringify(pizza) %>" class="add-to-cart py-1 px-4 rounded-full flex items-center justify-center font-bold bg-primary text-white hover:bg-primary-dark transition">
+    <span class="text-lg mr-2">+</span>
+    <span class="text-sm">Add</span>
+</button>
+
           </div>
         </div>
       </div>

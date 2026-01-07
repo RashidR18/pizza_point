@@ -8,7 +8,8 @@
     "start": "node server.js",
     "dev": "nodemon server.js",
     "build": "npm run production",
-    "production": "cross-env NODE_ENV=production npx webpack --progress --mode production"
+    "production": "node_modules/.bin/cross-env NODE_ENV=production node_modules/.bin/webpack --progress --mode production"
+
   },
   "dependencies": {
     "@stripe/stripe-js": "^6.0.0",

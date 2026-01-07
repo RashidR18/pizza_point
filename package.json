@@ -11,36 +11,36 @@
     "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --mode production"
   },
   "dependencies": {
-    "@stripe/stripe-js": "^6.0.0",
-    "axios": "^1.8.1",
-    "bcrypt": "^5.1.1",
-    "connect-mongo": "^5.1.0",
-    "cross-env": "^7.0.3",
-    "dotenv": "^16.4.7",
-    "ejs": "^3.1.10",
-    "express": "^4.21.2",
-    "express-ejs-layouts": "^2.5.1",
-    "express-flash": "^0.0.2",
-    "express-session": "^1.18.1",
-    "moment": "^2.30.1",
-    "mongodb": "^6.14.0",
-    "mongoose": "^8.11.0",
-    "noty": "^3.2.0-beta-deprecated",
-    "passport": "^0.7.0",
-    "passport-local": "^1.0.0",
-    "socket.io": "^4.8.1",
-    "tailwindcss": "^4.0.8",
-    "util": "^0.12.5"
-  },
-  "devDependencies": {
-    "laravel-mix": "^6.0.49",
-    "webpack": "^5.98.0",
-    "webpack-cli": "^5.1.4",
-    "cross-env": "^7.0.3",
-    "sass": "^1.85.0",
-    "sass-loader": "12.1.0",
-    "nodemon": "^3.1.9",
-    "resolve-url-loader": "5.0.0",
-    "@babel/plugin-proposal-class-properties": "^7.18.6"
-  }
+  "@stripe/stripe-js": "^6.0.0",
+  "axios": "^1.8.1",
+  "bcrypt": "^5.1.1",
+  "connect-mongo": "^5.1.0",
+  "cross-env": "^7.0.3",
+  "dotenv": "^16.4.7",
+  "ejs": "^3.1.10",
+  "express": "^4.21.2",
+  "express-ejs-layouts": "^2.5.1",
+  "express-flash": "^0.0.2",
+  "express-session": "^1.18.1",
+  "moment": "^2.30.1",
+  "mongodb": "^6.14.0",
+  "mongoose": "^8.11.0",
+  "noty": "^3.2.0-beta-deprecated",
+  "passport": "^0.7.0",
+  "passport-local": "^1.0.0",
+  "socket.io": "^4.8.1",
+  "tailwindcss": "^4.0.8",
+  "util": "^0.12.5"
+},
+"devDependencies": {
+  "laravel-mix": "^6.0.49",
+  "webpack": "^5.98.0",
+  "webpack-cli": "^5.1.4",
+  "sass": "^1.85.0",
+  "sass-loader": "12.1.0",
+  "nodemon": "^3.1.9",
+  "resolve-url-loader": "5.0.0",
+  "@babel/plugin-proposal-class-properties": "^7.18.6"
+}
+
 }

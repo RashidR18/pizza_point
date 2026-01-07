@@ -24,13 +24,17 @@ passport.use(new LocalStrategy({usernameField: 'email'},async(email,password,don
 
 }))
 
-passport.serializeUser((user,done)=>{
-    done(null,user._id)
-})
+passport.serializeUser((user, done) => {
+    done(null, { id: user._id, role: user.role }); // Store both ID and role
+});
 
-passport.deserializeUser(async (id, done) => {
+passport.deserializeUser(async (data, done) => {
     try {
-        const user = await User.findById(id); // Use `await` instead of a callback
+        const user = await User.findById(data.id);
+        if (!user) {
+            return done(null, false);
+        }
+        user.role = data.role; // Ensure role is preserved
         done(null, user);
     } catch (err) {
         done(err);

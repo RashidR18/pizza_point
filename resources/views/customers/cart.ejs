@@ -15,6 +15,15 @@
                 </div>
                 <span class="flex-1"><%= pizza.qty %></span>
                 <span class="font-bold text-lg">₹<%= pizza.items.price*pizza.qty %></span>
+
+                <!-- Replace the existing form with this inside the pizza loop -->
+<button 
+class="remove-item text-red-600 font-bold hover:underline ml-4" 
+data-id="<%= pizza.items._id %>" 
+data-size="<%= pizza.items.size %>">
+Remove
+</button>
+
             </div> 
             <% } %>
         </div>
@@ -23,16 +32,21 @@
             <div>
                 <span class="text-lg font-bold">Total Amount</span>
                 <span class="amount text-2xl font-bold ml-2">₹<%= session.cart.totalPrice %></span>
-                <form action="" class="mt-12">
-                    <input class="border border-gray-400 p-2 w-1/2 mb-4" type="text" placeholder="Phone number">
-                    <input class="border border-gray-400 p-2 w-1/2 mb-4" type="text" placeholder="Address">
+            </div>
+            <% if(user) { %>
+            <div>
+                <form action="/orders" method="POST" class="mt-12">
+                    <input name="phone" class="border border-gray-400 p-2 w-1/2 mb-4" type="text" placeholder="Phone number">
+                    <input name="address" class="border border-gray-400 p-2 w-1/2 mb-4" type="text" placeholder="Address">
                     <div>
-                        <!-- <button class="btn-primary px-6 py-2 rounded-full text-white font-bold mt-6" type="submit">Order Now</button> -->
+                        <button class="btn-primary px-6 py-2 rounded-full text-white font-bold mt-6" type="submit">Order Now</button>
 
                     </div>
                 </form>
             </div>
+            <% } else { %>
             <a href="/login" class="inline-block cursor-pointer btn-primary px-6 py-2 rounded-full text-white font-bold mt-6">Login to Continue</a>
+            <% } %>
         </div>
     </div>
 <% } else { %>
@@ -49,3 +63,31 @@
     <% } %>
 
 </section>
+
+<script>
+    document.querySelectorAll('.remove-item').forEach(button => {
+        button.addEventListener('click', async function () {
+            const id = this.dataset.id;
+            const size = this.dataset.size;
+
+            try {
+                const res = await fetch('/remove-from-cart', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({ id, size })
+                });
+
+                const data = await res.json();
+                if (data.success) {
+                    // Reload or remove item from DOM without full reload
+                    window.location.reload(); // or use DOM manipulation for smoother UX
+                }
+            } catch (err) {
+                console.error('Failed to remove item', err);
+            }
+        });
+    });
+</script>

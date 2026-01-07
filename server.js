@@ -10,35 +10,59 @@ const session = require('express-session');
 const flash = require('express-flash');
 const MongoDbStore = require('connect-mongo');
 const passport = require('passport');
+const Emitter = require('events');
 
 // DATABASE CONNECTION
-const url = 'mongodb+srv://PizzaPoint:Pizza123@pizzapoint.jatst.mongodb.net/?retryWrites=true&w=majority&appName=PizzaPoint';
-mongoose.connect(url)
-  .then(() => console.log('✅ Database connected...'))
-  .catch((err) => console.error('❌ Connection Failed...', err));
+const MONGO_URI = 'mongodb+srv://PizzaPoint:Pizza123@pizzapoint.jatst.mongodb.net/?retryWrites=true&w=majority&appName=PizzaPoint';
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
 
-// SESSION CONFIGURATION (BEFORE PASSPORT)
+// SESSION CONFIGURATION
 const mongoStore = MongoDbStore.create({
-    mongoUrl: url, // MongoDB URL
+    mongoUrl: url, 
     collectionName: 'sessions'
 });
 
+// Event emitter
+const eventEmitter = new Emitter();
+app.set('eventEmitter', eventEmitter);
+
 app.use(session({
-    secret: process.env.COOKIE_SECRET || 'some_secret_key',
+    secret: 'your_secret_key', // Change to a strong secret
     resave: false,
-    store: mongoStore,
     saveUninitialized: false,
-    cookie: { maxAge: 1000 * 60 * 60 * 24 } // 24 hours
+    store: mongoStore,
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 24 // 1 day
+    }
 }));
 
-// FLASH MESSAGES
-app.use(flash());
-
-// PASSPORT CONFIGURATION (AFTER SESSION)
+// PASSPORT CONFIGURATION
 const passportInit = require('./app/config/passport');
 passportInit(passport);
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Middleware to pass user data to views
+app.use((req, res, next) => {
+    res.locals.user = req.isAuthenticated() ? req.user : null;
+    next();
+});
+
+// FLASH MESSAGES
+app.use(flash());
+
+// Ensure session exists
+app.use((req, res, next) => {
+    if (!req.session) req.session = {}; 
+    req.session._garbage = Date();
+    req.session.touch();
+    next();
+});
+
+
 
 // STATIC FILES
 app.use(express.static('public'));
@@ -47,10 +71,10 @@ app.use(express.static('public'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-// GLOBAL MIDDLEWARE
+// GLOBAL MIDDLEWARE - Pass logged-in user to views
 app.use((req, res, next) => {
     res.locals.session = req.session;
-    res.locals.user = req.user; // Fixing "Cannot set properties of undefined"
+    res.locals.user = req.session.customer || req.session.admin || null; // Ensure `user` exists
     next();
 });
 
@@ -59,10 +83,76 @@ app.use(expressLayout);
 app.set('views', path.join(__dirname, '/resources/views'));
 app.set('view engine', 'ejs');
 
+// LOGIN ROUTE (Fix session overwriting issue)
+app.post('/login', (req, res, next) => {
+    let cart = req.session.cart || null; // Preserve cart before login
+
+    passport.authenticate('local', (err, user, info) => {
+        if (err) return next(err);
+        if (!user) return res.redirect('/login');
+
+        req.logIn(user, (err) => {
+            if (err) return next(err);
+
+            // Restore Cart After Login
+            req.session.cart = cart;
+
+            // Store session separately for admin & customer
+            if (user.role === 'admin') {
+                req.session.admin = user;
+            } else {
+                req.session.customer = user;
+            }
+
+            req.session.save((err) => {
+                if (err) console.log('Session Save Error:', err);
+                return res.redirect(user.role === 'admin' ? '/admin/orders' : '/customer/orders');
+            });
+        });
+    })(req, res, next);
+});
+
+// LOGOUT ROUTE (Ensure only correct session is cleared)
+app.post('/logout', (req, res) => {
+    if (req.session.admin) {
+        req.session.admin = null; // Logout admin
+    }
+    if (req.session.customer) {
+        req.session.customer = null; // Logout customer
+    }
+
+    req.session.destroy((err) => {
+        if (err) console.log('Error destroying session:', err);
+        res.redirect('/');
+    });
+});
+
+
+
+
+
 // ROUTES
 require('./routes/web')(app);
 
 // START SERVER
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
+});
+
+// SOCKET.IO CONFIGURATION
+const io = require('socket.io')(server);
+io.on('connection', (socket) => {
+    // Join
+    socket.on('join', (orderId) => {
+        socket.join(orderId);
+    });
+});
+
+// Event Handling for Real-Time Updates
+eventEmitter.on('orderUpdated', (data) => {
+    io.to(`order_${data.id}`).emit('orderUpdated', data);
+});
+
+eventEmitter.on('orderPlaced', (data) => {
+    io.to('adminRoom').emit('orderPlaced', data);
 });

@@ -7,7 +7,7 @@ This project is built using Node.js, Express, MongoDB, and EJS with authenticati
 
 https://pizza-point.onrender.com
 
-live link 
+live link above☝️
 
 🚀 Features
 👤 User Features

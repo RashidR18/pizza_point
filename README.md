@@ -174,6 +174,9 @@ Cart Page
 
 <img width="1911" height="854" alt="Screenshot 2025-04-12 182216" src="https://github.com/user-attachments/assets/f0aca656-35c3-41d2-835e-87c74e7686e4" />
 
+<img width="1906" height="857" alt="Screenshot 2025-04-12 182359" src="https://github.com/user-attachments/assets/81203e05-16ff-40ce-9332-5d0312229844" />
+
+
 
 Order Tracking
 

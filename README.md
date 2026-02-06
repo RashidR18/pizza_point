@@ -77,30 +77,49 @@ Passport.js (Authentication)
 
 📁 Project Structure
 pizza_point
+
 │
+
 ├── app
+
 │   ├── controllers
+
 │   ├── middleware
+
 │   ├── models
+
 │   └── config
+
 │
+
 ├── public
+
 │   ├── css
+
 │   ├── img
+
 │   └── js
+
 │
+
 ├── resources/views (EJS files)
+
 ├── routes
+
 ├── server.js
+
 └── package.json
+
 
 ⚙️ Installation & Setup
 
 1️⃣ Clone Repository
+
 git clone https://github.com/RashidR18/pizza_point.git
 cd pizza_point
 
 2️⃣ Install Dependencies
+
 npm install
 
 3️⃣ Create .env File
@@ -112,6 +131,7 @@ MONGO_CONNECTION_URL=your_mongodb_url
 SESSION_SECRET=your_secret_key
 
 4️⃣ Run Project
+
 npm run dev
 
 
@@ -124,23 +144,40 @@ Server will run on:
 
 http://localhost:3000
 
+
 🔐 Admin Login (Example)
+
 
 You can create admin manually in database or modify role in MongoDB:
 
 role: admin
 
-📸 Screenshots (Add later)
+📸 Screenshots 
 
-Home Page
+Home Page 
+
+<img width="1911" height="876" alt="pizzapoint" src="https://github.com/user-attachments/assets/46f032c3-25c7-41f8-9fea-700d9c667e8a" />
+
+
+Login Page
+
+<img width="1907" height="870" alt="Screenshot 2025-04-12 182140" src="https://github.com/user-attachments/assets/955abb7d-d6ce-4de0-a2aa-cdd2c419eeaa" />
+
 
 Menu Page
 
+<img width="1893" height="822" alt="Screenshot 2025-04-12 182054" src="https://github.com/user-attachments/assets/197a95df-da6e-460c-9f3d-f2a28eea951e" />
+
+
 Cart Page
 
-Admin Dashboard
+<img width="1911" height="854" alt="Screenshot 2025-04-12 182216" src="https://github.com/user-attachments/assets/f0aca656-35c3-41d2-835e-87c74e7686e4" />
+
 
 Order Tracking
+
+<img width="1910" height="729" alt="Screenshot 2025-04-12 182244" src="https://github.com/user-attachments/assets/a77e777b-5819-4dbc-ad09-255fddf40069" />
+
 
 🎯 Learning Outcomes
 
